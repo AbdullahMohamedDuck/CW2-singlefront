@@ -153,6 +153,18 @@
     },
 
         methods: {
+            
+            displayData() {
+                fetch('https://cst3145cw2-single.herokuapp.com/collection/products').then(
+                    function (response) {
+                        response.json().then(
+                            function (json) {
+                                webshop.products = json
+                            }
+                        )
+                    }
+                )},
+
             addItem(product){      
                 this.cart.push(product)
                 product.availableInventory--;
@@ -184,11 +196,11 @@
                 this.sortBy = s;
 
             },
-           
-           
+            
                 formAcceptenance() {
                 alert("Order has been successfully placed!");
             },
+            
             
         },
 
