@@ -7,7 +7,7 @@ let products = [
     "price":99,
     "location": "London",
     "image":"images/maths.jpg", 
-    "availableInventory":5     
+    "Spaces":5     
 },
 {  
     "id":1002,
@@ -16,7 +16,7 @@ let products = [
     "price": 100,
     "location": "London",
     "image":"images/art.jpg", 
-    "availableInventory":5     
+    "Spaces":5     
 },
 
 {  

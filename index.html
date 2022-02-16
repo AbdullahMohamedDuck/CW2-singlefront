@@ -61,12 +61,12 @@
     <div class="subjectborder">
     <figure> <img v-bind:src='product.image'> </figure>
     <h2 v-text= 'product.title'></h2>
-    <p>id: {{product.id}}</p>
+    <p>Lesson ID: {{product.productID}}</p>
     <p>Description: {{product.description}}</p>
     <p>Location: {{product.location}}</p>
     <p>Price: £{{product.price}}</p>
-    <p>Spaces: {{product.availableInventory}}</p>
-   <button @click='addItem(product)' v-bind:disabled='!canAddToItem(product)'><span class="fas fa-shopping-basket"></span>Add to cart</button>
+    <p>Spaces: {{product.Spaces }}</p>
+   <button @click='addItem(product)' v-bind:disabled='!canAddToCart(product)'><span class="fas fa-shopping-basket"></span>Add to cart</button>
     
     
 </div>
@@ -91,7 +91,7 @@
          <img v-bind:src='product.image' alt="" width="100px" height="100px">
         <br>
         {{product.title}} <br>
-        id: {{product.id}}<br>
+        Lesson ID: {{product.productID}}<br>
         Location: {{product.location}} <br>
         Price: £{{product.price}} <br>
         <button @click='removeFromCart(product)'>Remove from cart</button>
@@ -99,11 +99,7 @@
          <!-- End of remove item from cart-->
         </div>
     </ul>
-    <p>
-        <Strong>Lesson ID</Strong>
-        <input type="text" maxlength="11" v-model='order.id'>
 
-    </p>
     <p>
         <Strong>First name</Strong>
         <input v-model='order.firstName'>
@@ -121,11 +117,24 @@
         <input type="text" maxlength="11" v-model='order.phoneNumber'>
 
     </p>
+    <p>
+        <Strong>Lesson ID</Strong>
+        <input type="text" maxlength="11" v-model='order.productID'>
+
+    </p>
+    <p>
+        <strong>Spaces: </strong>
+        <input type="number" v-model.trim=order.spaces>
+    </p>
+    
 
     <h3>Order Information</h3>
     <p>First name: {{order.firstName}}</p>
     <p>Last name: {{order.lastName}}</p>
     <p>Phone number: {{order.phoneNumber}}</p>
+    <p>Lesson ID: {{order.productID}}</p>
+    <p>Spaces: {{order.spaces}}</p>
+
     <button @Click="submitForm" :disabled="!orderFormCheck">Checkout</button>
 
 
@@ -153,7 +162,7 @@
             lastName: '',
             phoneNumber:'',
             gift: 'No.',
-            id:"",
+            productID:"",
             spaces: 0,
             sendGift: 'Yes.',
             doNotSendGift: 'No.'
@@ -174,12 +183,12 @@
                     }
                 )},
                 submitForm() {
-                //post order first/last name, phone number, spaces, id, 
+                //post order first/last name, phone number, spaces, productID, 
                 let order = {
                     'First Name': this.order.firstName,
                     'Last Name': this.order.lastName,
                     'Phone Number': this.order.phoneNumber,
-                    'id': this.order.id,
+                    'productID': this.order.productID,
                     'Spaces': this.order.spaces,
                 }
                 fetch("https://cst3145cw2-single.herokuapp.com/collection/OrderInfo", {
@@ -194,29 +203,62 @@
                     )
                     alert("Order has been successfully placed!");
 
-                })},
+                })
+                //put to update lesson spaces
+                let oldSpaces = 0
+                for (index = 0; index < 10; index++) {
+                    console.log(this.products[index].productID)
+                    console.log(this.order.productID)
+                    if (this.products[index].productID.localeCompare(this.order.productID) == 0) {
+                        oldSpaces = this.products[index].Spaces
+                        break
+                    }
+                }
+                let updatedSpaces = { "Spaces": oldSpaces - this.order.spaces }
+
+                fetch("https://cst3145cw2-single.herokuapp.com/collection/products/" + this.order.productID, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(updatedSpaces),
+                }).then(function (response) {
+                    response.json().then(
+                        console.log("Spaces Successfully updated in Database")
+                    )
+                })
+
+                alert("order submitted");
+            },
+            
     ///////////////////////////////////////////////////////////////////////////////////////////
 
             addItem(product){      
                 this.cart.push(product)
-                product.availableInventory--;
+                product.Spaces--
             },
+    ///////////////////////////////////////////////////////////////////////////////////////////
+           
             showCheckout() {
+                this.displayData
                 this.showProduct = this.showProduct ? false : true;
             },      
+
+    ///////////////////////////////////////////////////////////////////////////////////////////
 
             removeFromCart(product) {
                 let index = this.cart.indexOf(product);
                 this.cart.splice(index, 1);
-                product.availableInventory++;
+                
             },
             
             backPage(){
                 this.showProduct = this.showProduct ? false : true;
             },
 
-            canAddToItem(product) {
-                return product.availableInventory > 0;
+            canAddToCart(product) {
+                return product.Spaces > 0;
+                
             },
             
 
