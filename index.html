@@ -61,6 +61,7 @@
     <div class="subjectborder">
     <figure> <img v-bind:src='product.image'> </figure>
     <h2 v-text= 'product.title'></h2>
+    <p>id: {{product.id}}</p>
     <p>Description: {{product.description}}</p>
     <p>Location: {{product.location}}</p>
     <p>Price: £{{product.price}}</p>
@@ -90,6 +91,7 @@
          <img v-bind:src='product.image' alt="" width="100px" height="100px">
         <br>
         {{product.title}} <br>
+        id: {{product.id}}<br>
         Location: {{product.location}} <br>
         Price: £{{product.price}} <br>
         <button @click='removeFromCart(product)'>Remove from cart</button>
@@ -97,6 +99,11 @@
          <!-- End of remove item from cart-->
         </div>
     </ul>
+    <p>
+        <Strong>Lesson ID</Strong>
+        <input type="text" maxlength="11" v-model='order.id'>
+
+    </p>
     <p>
         <Strong>First name</Strong>
         <input v-model='order.firstName'>
@@ -119,7 +126,7 @@
     <p>First name: {{order.firstName}}</p>
     <p>Last name: {{order.lastName}}</p>
     <p>Phone number: {{order.phoneNumber}}</p>
-    <button @Click="formAcceptenance" :disabled="!orderFormCheck">Checkout</button>
+    <button @Click="submitForm" :disabled="!orderFormCheck">Checkout</button>
 
 
 
@@ -146,6 +153,7 @@
             lastName: '',
             phoneNumber:'',
             gift: 'No.',
+            spaces: 0,
             sendGift: 'Yes.',
             doNotSendGift: 'No.'
         },
@@ -153,7 +161,7 @@
     },
 
         methods: {
-            
+            ///////////////////////////////////////////////////////////////////////////////////////////
             displayData() {
                 fetch('https://cst3145cw2-single.herokuapp.com/collection/products').then(
                     function (response) {
@@ -164,6 +172,27 @@
                         )
                     }
                 )},
+                submitForm() {
+                //post order first/last name, phone number, spaces, id, 
+                let order = {
+                    'First Name': this.order.firstName,
+                    'Last Name': this.order.lastName,
+                    'Phone Number': this.order.phoneNumber,
+                    'id': this.order.id,
+                    'Spaces': this.order.spaces,
+                }
+                fetch("https://cst3145cw2-single.herokuapp.com/collection/OrderInfo", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(order),
+                }).then(function (response) {
+                    response.json().then(
+                        console.log("Order Successfully posted to database")
+                    )
+                })},
+    ///////////////////////////////////////////////////////////////////////////////////////////
 
             addItem(product){      
                 this.cart.push(product)
@@ -197,9 +226,6 @@
 
             },
             
-                formAcceptenance() {
-                alert("Order has been successfully placed!");
-            },
             
             
         },
