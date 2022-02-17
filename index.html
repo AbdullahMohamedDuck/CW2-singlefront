@@ -117,23 +117,14 @@
         <input type="text" maxlength="11" v-model='order.phoneNumber'>
 
     </p>
-    <p>
-        <Strong>Lesson ID</Strong>
-        <input type="text" maxlength="11" v-model='order.productID'>
-
-    </p>
-    <p>
-        <strong>Spaces: </strong>
-        <input type="number" v-model.trim=order.spaces>
-    </p>
+    
     
 
     <h3>Order Information</h3>
     <p>First name: {{order.firstName}}</p>
     <p>Last name: {{order.lastName}}</p>
     <p>Phone number: {{order.phoneNumber}}</p>
-    <p>Lesson ID: {{order.productID}}</p>
-    <p>Spaces: {{order.spaces}}</p>
+    
 
     <button @Click="submitForm" :disabled="!orderFormCheck">Checkout</button>
 
