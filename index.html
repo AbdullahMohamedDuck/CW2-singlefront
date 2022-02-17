@@ -59,7 +59,7 @@
             
     <div class="subjectborder">
         <figure>
-            <img v-bind:src="`${apiUrl}/${product.image}`">
+            <img v-bind:src='product.image'>
         </figure>  
     <h2>{{product.topic}}</p> </h2>
     <p>Lesson ID: {{product.productID}}</p>
@@ -91,8 +91,7 @@
         <div v-for="(product, products) in cart" class="productList">
          <img v-bind:src='product.image' alt="" width="100px" height="100px">
         <br>
-        {{product.title}} <br>
-        Lesson ID: {{product.productID}}<br>
+        {{product.topic}} <br>
         Location: {{product.location}} <br>
         Price: £{{product.price}} <br>
         <button @click='removeFromCart(product)'>Remove from cart</button>
