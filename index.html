@@ -8,7 +8,6 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <link rel="stylesheet" href="design.css">
-    <script src="products.js"></script>
     
 </head>
 
@@ -50,7 +49,7 @@
         
         <!-- Start sorting ascending/descending -->
             <strong>Sort By</strong>           
-                        <p><button @click="sort('title')"><span class="fas fa-sort"></span></button> Subject</p>
+                        <p><button @click="sort('title')"><span class="fas fa-sort"></span></button> Topic</p>
                         <p><button @click="sort('location')"><span class="fas fa-sort"></span></button> Location</p>
                         <p><button @click="sort('price')"><span class="fas fa-sort"></span></button> Price</p>
                 
@@ -59,8 +58,10 @@
         <div v-for='product in sortedProducts'>
             
     <div class="subjectborder">
-    <figure> <img v-bind:src='product.image'> </figure>
-    <h2 v-text= 'product.title'></h2>
+        <figure>
+            <img v-bind:src="`${apiUrl}/${product.image}`">
+        </figure>  
+    <h2>{{product.topic}}</p> </h2>
     <p>Lesson ID: {{product.productID}}</p>
     <p>Description: {{product.description}}</p>
     <p>Location: {{product.location}}</p>
@@ -147,11 +148,13 @@
 <script type="application/javascript"> 
 
       let webshop = new Vue({
+          
+    
         el: "#app",
         data:{
             sitename: "Subject Classes",
+            apiUrl: 'https://cst3145cw2-single.herokuapp.com/',
             showProduct: true,
-            products: products,
 
         cart:[],
         search:"",
@@ -167,21 +170,20 @@
             sendGift: 'Yes.',
             doNotSendGift: 'No.'
         },
-        
-    },
+        products: [],
 
+    },
+        mounted() {     
+            fetch(this.apiUrl + "collection/products").then(response => response.json()).then(
+                data => {
+                    this.products = data;
+                });
+        },
         methods: {
             ///////////////////////////////////////////////////////////////////////////////////////////
-            displayData() {
-                fetch('https://cst3145cw2-single.herokuapp.com/collection/products').then(
-                    function (response) {
-                        response.json().then(
-                            function (json) {
-                                webshop.products = json
-                            }
-                        )
-                    }
-                )},
+            
+            // loads all lessons MOUNT IT
+
                 submitForm() {
                 //post order first/last name, phone number, spaces, productID, 
                 let order = {
@@ -191,7 +193,7 @@
                     'productID': this.order.productID,
                     'Spaces': this.order.spaces,
                 }
-                fetch("https://cst3145cw2-single.herokuapp.com/collection/OrderInfo", {
+                fetch(this.apiUrl + "collection/OrderInfo", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -205,7 +207,7 @@
 
                 })
                 //put to update lesson spaces
-                let oldSpaces = 0
+                const oldSpaces = 0
                 for (index = 0; index < 10; index++) {
                     console.log(this.products[index].productID)
                     console.log(this.order.productID)
@@ -214,9 +216,9 @@
                         break
                     }
                 }
-                let updatedSpaces = { "Spaces": oldSpaces - this.order.spaces }
+                const updatedSpaces = { "Spaces": oldSpaces - this.order.spaces }
 
-                fetch("https://cst3145cw2-single.herokuapp.com/collection/products/" + this.order.productID, {
+                fetch(this.apiUrl + "collection/products" + this.order.productID, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -277,6 +279,7 @@
         },
 
         computed: {
+            
                        // Number/Name checker Function
                 orderFormCheck(){
                 let lettercheck = /^[a-z]+$/i;
@@ -304,8 +307,8 @@
                     // Search Function
                     for (let i = 0; i < this.products.length; i++) {
                         let location = this.products[i].location.toLowerCase(); 
-                        let subject = this.products[i].subject.toLowerCase();
-                    if (!(subject.includes(this.search.toLowerCase()) || location.toLowerCase().includes(this.search.toLowerCase()))) {
+                        let title = this.products[i].title.toLowerCase();
+                    if (!(title.includes(this.search.toLowerCase()) || location.toLowerCase().includes(this.search.toLowerCase()))) {
                         this.products[i] = false;
                     }
                     else{
@@ -317,7 +320,7 @@
          },
 
            
-                
+        
             
             
             
