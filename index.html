@@ -50,7 +50,7 @@
 
                         <!-- Start sorting ascending/descending -->
                         <strong>Sort By</strong>
-                        <p><button @click="sort('title')"><span class="fas fa-sort"></span></button> Topic</p>
+                        <p><button @click="sort('topic')"><span class="fas fa-sort"></span></button> Topic</p>
                         <p><button @click="sort('location')"><span class="fas fa-sort"></span></button> Location</p>
                         <p><button @click="sort('price')"><span class="fas fa-sort"></span></button> Price</p>
 
@@ -218,13 +218,13 @@
 
                             },
 
-                            ///////////////////////////////////////////////////////////////////////////////////////////
+                            
 
                             addItem(product) {
                                 this.cart.push(product)
                                 product.Spaces--
                             },
-                            ///////////////////////////////////////////////////////////////////////////////////////////
+                            
 
                             showCheckout() {
                                 this.showProduct = this.showProduct ? false : true;
@@ -238,7 +238,7 @@
                                 }
                             },
 
-                            ///////////////////////////////////////////////////////////////////////////////////////////
+                            
 
                             removeFromCart(product) {
                                 let index = this.cart.indexOf(product);
@@ -309,7 +309,21 @@
                                     return 0;
                                 })
 
-                                // Search Function
+                               /* // Search Function
+                                  if (this.search==="") {
+                                 this.displayData()
+                }
+                                 else {
+                                          fetch(this.apiUrl + "collection/products" + this.search + '/lessons').then(
+                                     function (response) {
+                                  response.json().then(
+                                function (json) {
+                                    app.lessons = json
+                                }
+                            )
+                        }
+                    )
+                }
                                 for (let i = 0; i < this.products.length; i++) {
                                     let location = this.products[i].location.toLowerCase();
                                     let title = this.products[i].title.toLowerCase();
@@ -320,10 +334,11 @@
                                         this.products[i] = true;
                                     }
                                 }
-                                return this.products.sort(compare);
-                            },
-                        },
+                                return this.products.sort(compare);*/
 
+                            },
+                            
+                        },
 
 
 
