@@ -146,8 +146,7 @@
                         el: "#app",
                         data: {
                             sitename: "Subject Classes",
-                            //apiUrl: 'https://cst3145cw2-single.herokuapp.com/',
-                            apiUrl: 'http://localhost:3000/',
+                            apiUrl: 'https://cst3145cw2-single.herokuapp.com/',
                             showProduct: true,
 
                             products: [],
@@ -199,16 +198,7 @@
                                     alert("Order has been successfully placed!");
 
                                 })
-                                //put to update lesson spaces
-                                // let oldSpaces = 0
-                                // for (index = 0; index < 10; index++) {
-                                //     console.log(this.products[index].productID)
-                                //     console.log(this.order.productID)
-                                //     if (this.products[index].productID.localeCompare(this.order.productID) == 0) {
-                                //         oldSpaces = this.products[index].Spaces
-                                //         break
-                                //     }
-                                // }
+                              
                                 let updatedSpaces = { "Spaces": this.order.Spaces }
 
                                 fetch(this.apiUrl + "collection/products/" + this.order.productID, {
